@@ -23,7 +23,8 @@ import {
   Car, 
   Trees, 
   Settings2,
-  ChevronDown
+  ChevronDown,
+  ChevronRight
 } from 'lucide-react';
 
 const contentSections = [
@@ -111,6 +112,19 @@ const contentSections = [
     ]
   },
   {
+    id: 'consulta-finiture',
+    num: '07b',
+    title: 'Dettagli di Capitolato',
+    subtitle: 'Consulta i Componenti',
+    layout: 'consultation',
+    items: [
+      { icon: Wind, title: 'Serramenti Nusco', desc: 'Infissi in PVC doppio vetro **Power 9000**.' },
+      { icon: DoorClosed, title: 'Portoncino & Porte', desc: 'Blindato **Classe 3** e porte interne laminate.' },
+      { icon: Palette, title: 'Pavimenti & Marmi', desc: 'Gres di prima scelta (**SAIME, Ragno, Piemme**).' },
+      { icon: Droplets, title: 'Sanitari RAK', desc: 'Qualità **RAK Ceramics** e rubinetterie di design.' }
+    ]
+  },
+  {
     id: 'tecnologia',
     num: '16-17',
     title: 'Tecnologia & Energia',
@@ -178,6 +192,45 @@ export default function App() {
       {contentSections.map((section, index) => {
         const isOdd = index % 2 !== 0;
         const isGridImage = section.layout === 'grid-image';
+        const isConsultation = section.layout === 'consultation';
+
+        if (isConsultation) {
+          return (
+            <section key={section.id} className="py-24 lg:py-32 bg-white border-y border-brand-sage/10">
+              <div className="max-w-7xl mx-auto px-6 text-center">
+                <div className="accent-text text-[10px] uppercase tracking-[0.4em] font-bold mb-4 text-brand-sage">
+                  {section.num} — {section.subtitle}
+                </div>
+                <h2 className="text-4xl lg:text-5xl font-serif italic mb-16 text-slate-800">
+                  {section.title}
+                </h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                  {section.items?.map((item, i) => (
+                    <motion.div
+                      key={i}
+                      whileHover={{ y: -5 }}
+                      className="p-8 bg-brand-cream rounded-[32px] border border-brand-sage/5 hover:border-brand-sage transition-all duration-300 text-left group flex flex-col h-full"
+                    >
+                      <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform">
+                        <item.icon className="w-6 h-6 text-brand-sage" />
+                      </div>
+                      <h3 className="text-lg font-serif italic mb-3 text-slate-800">
+                        {item.title}
+                      </h3>
+                      <div className="text-sm text-slate-500 leading-relaxed">
+                        <ReactMarkdown>{item.desc}</ReactMarkdown>
+                      </div>
+                      <div className="mt-auto pt-6 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-brand-sage opacity-0 group-hover:opacity-100 transition-opacity">
+                        Consulta <ChevronRight className="w-3 h-3" />
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          );
+        }
 
         return (
           <section 
