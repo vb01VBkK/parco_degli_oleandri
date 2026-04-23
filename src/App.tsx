@@ -32,6 +32,7 @@ const contentSections = [
     num: '01',
     title: 'Premessa',
     subtitle: 'Rifugio Residenziale',
+    image: 'https://lh3.googleusercontent.com/d/1hBb-zKTfI_Bi7QbEJk5wj6KcBQKyjzzD',
     text: [
       `Il presente documento costituisce il **Capitolato Descrittivo di Vendita** relativo alle unità immobiliari facenti parte del complesso residenziale **“Parco Degli Oleandri Nola – Lotto 9 e Lotto 10”**, realizzato in Nola alla Via Circumvallazione, V° Traversa n. 9, e commercializzato dalla **Pro House S.r.l.**`,
       `Il capitolato è predisposto con finalità *illustrativa, descrittiva e commerciale* e ha lo scopo di rappresentare le caratteristiche generali dell’intervento, il livello qualitativo delle soluzioni costruttive adottate, il valore dell’involucro edilizio già realizzato, le principali dotazioni impiantistiche orientate al risparmio energetico, le finiture previste per le singole unità immobiliari e le caratteristiche delle parti comuni.`,
@@ -43,6 +44,7 @@ const contentSections = [
     num: '02',
     title: 'Descrizione generale dell\'intervento',
     subtitle: 'L\'Involucro Evoluto',
+    image: 'https://lh3.googleusercontent.com/d/1RrmKjZdn_REgicGskp1XrEiDrBrxilC8',
     text: [
       `Il complesso **Parco Degli Oleandri Nola – Lotto 9 e Lotto 10** è costituito da due edifici residenziali, ciascuno servito da un’unica scala, sviluppati su tre livelli fuori terra oltre ad un piano interrato destinato ai locali e agli spazi accessori previsti dal progetto.`,
       `Ciascun edificio comprende **dodici unità abitative** progettate secondo tagli residenziali di *tre vani e quattro vani*, con soluzioni pensate per garantire funzionalità degli ambienti, luminosità degli spazi, comfort abitativo e un elevato standard qualitativo sia sotto il profilo costruttivo sia sotto quello impiantistico.`,
@@ -54,6 +56,7 @@ const contentSections = [
     num: '03',
     title: 'Contesto residenziale',
     subtitle: 'Vivere nel Verde',
+    image: 'https://lh3.googleusercontent.com/d/11kSOvJJYAma5Lb5K0ee3XlQ8CEE_uOtI',
     text: [
       `Il **Parco Degli Oleandri Nola – Lotto 9 e Lotto 10** è concepito come un complesso residenziale inserito in un contesto privato e già strutturato, pensato per offrire privacy, vivibilità e comfort all’interno di un ambiente ordinato e caratterizzato dalla presenza del **verde** quale elemento distintivo del progetto abitativo.`,
       `L’intervento è stato pensato per valorizzare la qualità dell’abitare attraverso una corretta distribuzione degli edifici, delle aree esterne e delle pertinenze, con l’obiettivo di creare un ambiente *armonioso e funzionale*, adatto ad una clientela che ricerca una nuova costruzione capace di coniugare comfort quotidiano, efficienza energetica e benessere abitativo in un contesto verde e riservato.`
@@ -64,6 +67,7 @@ const contentSections = [
     num: '04',
     title: 'Caratteristiche tipologiche',
     subtitle: 'Razionalità Distributiva',
+    image: 'https://lh3.googleusercontent.com/d/1Cam95-1LwLw7x9w-U2gYRShChNy46bCP',
     text: [
       `Le unità immobiliari del complesso sono costituite da appartamenti di *tre vani e quattro vani*, progettati secondo criteri di funzionalità e razionalità distributiva.`,
       `Le singole abitazioni potranno essere dotate, a seconda della tipologia, di terrazzi, giardini e spazi esterni pertinenziali, oltre al **box auto privato**. La composizione interna, la disposizione dei vani, gli affacci, le superfici e le pertinenze esclusive delle singole unità saranno quelle risultanti dai grafici di progetto e dalla documentazione contrattuale specifica riferita all’immobile prescelto.`
@@ -93,6 +97,12 @@ const contentSections = [
       `Soglie e davanzali in **marmo Verde Marina**; pavimentazioni in gres porcellanato per esterni **SAIME** per balconi e terrazzi.`
     ],
     layout: 'grid-image',
+    image: 'https://lh3.googleusercontent.com/d/1m1GUAz1t_nIE3H-Am-97TQKg8-EFnIcc',
+    gallery: [
+      'https://lh3.googleusercontent.com/d/165gudghf97_E7hr2LFv-Der6E3whOFUk',
+      'https://lh3.googleusercontent.com/d/1AYkofL2NoeyiVGUhr0P6poJZHuDTfJp7',
+      'https://lh3.googleusercontent.com/d/11I19tS720A9R4RgOwuAThAHnSGMSWwHy'
+    ],
     gridItems: [
       { icon: Wind, title: 'Serramenti Nusco', desc: 'Infissi in PVC doppio vetro **Power 9000**.' },
       { icon: DoorClosed, title: 'Portoncino & Porte', desc: 'Blindato **Classe 3** e porte interne laminate.' },
@@ -213,7 +223,7 @@ export default function App() {
                       transition={{ duration: 1 }}
                     >
                       <img 
-                        src={`https://picsum.photos/seed/${section.id}/1000/1300`} 
+                        src={section.image || `https://picsum.photos/seed/${section.id}/1000/1300`} 
                         alt={section.title}
                         className="w-full h-[700px] object-cover rounded-[56px] shadow-2xl skew-y-1"
                         referrerPolicy="no-referrer"
@@ -265,7 +275,7 @@ export default function App() {
                     ) : (
                       <div className="relative">
                         <img 
-                          src={`https://picsum.photos/seed/${section.id}/800/1000`} 
+                          src={section.image || `https://picsum.photos/seed/${section.id}/800/1000`} 
                           alt={section.title}
                           className="w-full h-[600px] object-cover rounded-[56px] shadow-2xl"
                           referrerPolicy="no-referrer"
@@ -278,6 +288,27 @@ export default function App() {
                       </div>
                     )}
                   </div>
+                </div>
+              )}
+
+              {/* Gallery Addition */}
+              {section.gallery && (
+                <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {section.gallery.map((img, i) => (
+                    <motion.div
+                      key={i}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      transition={{ duration: 0.8, delay: i * 0.1 }}
+                    >
+                      <img 
+                        src={img} 
+                        alt={`${section.title} gallery ${i}`}
+                        className="w-full h-80 object-cover rounded-3xl shadow-xl hover:scale-[1.02] transition-transform duration-500"
+                        referrerPolicy="no-referrer"
+                      />
+                    </motion.div>
+                  ))}
                 </div>
               )}
             </div>
