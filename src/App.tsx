@@ -3,10 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import React, { Fragment } from 'react';
 import { motion } from 'motion/react';
 import ReactMarkdown from 'react-markdown';
 import { 
   Building2, 
+  MapPin,
+  Maximize,
   FileText, 
   Home, 
   Layers, 
@@ -24,10 +27,31 @@ import {
   Trees, 
   Settings2,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  Thermometer,
+  Cpu,
+  Smartphone,
+  Users,
+  Weight
 } from 'lucide-react';
 
-const contentSections = [
+interface ContentSection {
+  id: string;
+  num: string;
+  title: string;
+  subtitle: string;
+  image?: string;
+  bgImage?: string;
+  text: string[];
+  layout?: 'grid-image' | 'consultation' | 'standard' | 'split-text';
+  items?: { icon: any; title: string; desc: string }[];
+  gridItems?: { icon: any; title: string; desc: string }[];
+  gallery?: string[];
+  quote?: string;
+  stats?: { label: string; value: string }[];
+}
+
+const contentSections: ContentSection[] = [
   {
     id: 'premessa',
     num: '01',
@@ -75,28 +99,97 @@ const contentSections = [
     ]
   },
   {
-    id: 'struttura-tamponature',
-    num: '05-06',
-    title: 'Architettura & Involucro',
-    subtitle: 'Solida Evoluzione',
+    id: 'struttura',
+    num: '05',
+    title: 'Struttura',
+    subtitle: 'Solidità & Sicurezza',
+    image: 'https://lh3.googleusercontent.com/d/1Cam95-1LwLw7x9w-U2gYRShChNy46bCP',
     text: [
-      `La struttura portante è in **cemento armato**, eseguita nel rispetto delle normative vigenti e delle più aggiornate disposizioni **antisismiche**. Tale impostazione costruttiva costituisce la base di un fabbricato solido, durevole e tecnicamente evoluto.`,
-      `Le tamponature esterne sono realizzate mediante blocchi in laterizio **Poroton FV Plus MVI35019**, scelti per le loro caratteristiche di resistenza, inerzia termica e contributo alle prestazioni energetiche dell’edificio.`
+      `La struttura portante è in **cemento armato**, eseguita nel rispetto delle normative vigenti e delle più aggiornate disposizioni **antisismiche**.`,
+      `Tale impostazione costruttiva costituisce la base di un fabbricato solido, durevole e tecnicamente evoluto, garantendo la massima sicurezza per te e la tua famiglia.`
     ],
     items: [
       { icon: ShieldCheck, title: 'Sicurezza Antisismica', desc: 'Rispetto delle normative **NTC 2018**.' },
-      { icon: Layers, title: 'Involucro Poroton', desc: 'Isolamento termo-acustico di **eccellenza**.' }
+      { icon: Layers, title: 'Cemento Armato', desc: 'Struttura solida e duratura nel tempo.' }
     ]
   },
   {
-    id: 'finiture',
-    num: '07-15',
-    title: 'Componenti & Finiture',
-    subtitle: 'L\'Eleganza del Dettaglio',
+    id: 'tamponature',
+    num: '06',
+    title: 'Tamponature esterne e isolamento dell’involucro',
+    subtitle: 'Qualità Termoigrometrica',
     text: [
-      `Materiali selezionati per estetica, sicurezza e durabilità. Ogni componente è scelto per integrarsi armoniosamente nel design del **Parco Degli Oleandri**.`,
-      `Soglie e davanzali in **marmo Verde Marina**; pavimentazioni in gres porcellanato per esterni **SAIME** per balconi e terrazzi.`
-    ],
+      `Le tamponature esterne risultano già realizzate mediante blocchi in laterizio tipo **Poroton FV Plus MVI35019**, dimensioni 24,5 × 35 × 19 cm, scelti per le loro caratteristiche di resistenza, inerzia termica e contributo alle prestazioni termoigrometriche dell’edificio. L’involucro già definito rappresenta uno degli elementi più qualificanti del complesso, poiché contribuisce in modo diretto al benessere interno e al risparmio energetico.`,
+      `L’isolamento termico dell’involucro risulta già garantito dall’impiego dei blocchi di tamponatura sopra descritti, dalla corretta risoluzione dei ponti termici in corrispondenza di travi e pilastri in cemento armato e dalla qualità prestazionale dei serramenti esterni. La continuità del sistema involucro-serramento è stata impostata per limitare le dispersioni, migliorare la stabilità termica degli ambienti e accrescere l’efficienza energetica dell’abitazione.`,
+      `L’insieme delle soluzioni adottate è finalizzato a migliorare il comfort interno degli ambienti, contenere la dispersione energetica, contribuire alla stabilità termoigrometrica dell’edificio e valorizzare il profilo energetico dell’intervento, rendendo l’involucro un elemento centrale della qualità abitativa proposta.`
+    ]
+  },
+  {
+    id: 'isolamento-acustico',
+    num: '07',
+    title: 'Divisori tra appartamenti e isolamento acustico',
+    subtitle: 'Comfort & Riservatezza',
+    text: [
+      `I divisori tra unità immobiliari contigue sono realizzati con sistema a **doppia fodera** in laterizio alveolato, costituito da due strati di muratura intervallati da isolante acustico dello spessore di **5 cm**, al fine di incrementare le prestazioni fonoisolanti tra appartamenti adiacenti.`,
+      `Tale soluzione costruttiva contribuisce a garantire un miglior comfort abitativo e una più efficace separazione acustica tra le diverse unità, in linea con il livello qualitativo dell’intervento.`
+    ]
+  },
+  {
+    id: 'tramezzature',
+    num: '08',
+    title: 'Tramezzature interne',
+    subtitle: 'Flessibilità & Leggerezza',
+    text: [
+      `Le tramezzature interne delle singole unità immobiliari saranno realizzate con pannelli di **gessofibra** su struttura in alluminio, soluzione che consente buona regolarità delle superfici, contenimento dei pesi e flessibilità nella distribuzione interna degli ambienti.`,
+      `Le pareti interne saranno opportunamente finite e predisposte per ricevere le lavorazioni di completamento e tinteggiatura.`
+    ]
+  },
+  {
+    id: 'facciate',
+    num: '09',
+    title: 'Facciate esterne',
+    subtitle: 'Immagine Moderna',
+    text: [
+      `Le facciate del complesso risultano realizzate con **intonaco termico**, integrate da rivestimenti in piastrelle estetiche e completate con pitturazione idonea alla protezione dagli agenti atmosferici, così da coniugare immagine architettonica e prestazioni dell’involucro.`,
+      `La composizione dei prospetti è definita in coerenza con il progetto architettonico del complesso, con l’obiettivo di conferire all’intervento un’immagine moderna, ordinata e durevole nel tempo, valorizzando al contempo le prestazioni complessive del fabbricato.`
+    ]
+  },
+  {
+    id: 'copertura',
+    num: '10',
+    title: 'Copertura',
+    subtitle: 'Protezione & Efficienza',
+    text: [
+      `La copertura risulta realizzata in **cemento armato**, con idoneo sistema di isolamento costituito da pannelli in **EPS** dello spessore di **10 cm**, completato da strato di guaina elastomerica e finitura superiore in guaina ardesiata.`,
+      `La stratigrafia adottata è finalizzata a garantire adeguate prestazioni di impermeabilizzazione, protezione dell’edificio e contributo al contenimento delle dispersioni termiche, migliorando il comportamento complessivo della copertura in termini di efficienza e durabilità.`
+    ]
+  },
+  {
+    id: 'serramenti',
+    num: '11',
+    title: 'Serramenti esterni e oscuranti',
+    subtitle: 'Qualità Nusco',
+    text: [
+      `I serramenti esterni risultano realizzati in **PVC con doppio vetro**, sistema **Power 9000 della Nusco S.p.A.**, scelti per le loro prestazioni in termini di isolamento termico, tenuta all’aria e all’acqua, comfort abitativo e contenimento dei consumi energetici.`,
+      `Gli oscuranti risultano costituiti da **tapparelle in alluminio coibentato**, idonee a migliorare la protezione solare, la durabilità e il comfort degli ambienti interni, contribuendo al controllo dell’irraggiamento e al miglioramento delle prestazioni dell’involucro.`
+    ]
+  },
+  {
+    id: 'porte',
+    num: '12',
+    title: 'Portoncino d’ingresso e porte interne',
+    subtitle: 'Sicurezza & Personalità',
+    text: [
+      `Ogni unità immobiliare sarà dotata di **portoncino blindato di ingresso in classe 3**, idoneo a garantire sicurezza, protezione e adeguato inserimento estetico rispetto al livello qualitativo del fabbricato.`,
+      `Le porte interne saranno previste secondo la tipologia standard di capitolato, con modelli in finitura microlaminata o equivalente, in colorazioni classiche quali bianco, noce nazionale o similari, selezionabili dal cliente tra quelle comprese nel campionario standard predisposto dalla parte venditrice presso i propri fornitori di riferimento.`,
+      `Eventuali richieste relative a modelli, finiture, soluzioni fuori misura o varianti non comprese nel campionario standard costituiranno extra capitolato e saranno oggetto di separata valutazione economica, compatibilmente con lo stato di avanzamento dei lavori.`
+    ]
+  },
+  {
+    id: 'pavimenti',
+    num: '13',
+    title: 'Pavimenti e rivestimenti interni',
+    subtitle: 'Estetica di Pregio',
     layout: 'grid-image',
     image: 'https://lh3.googleusercontent.com/d/1m1GUAz1t_nIE3H-Am-97TQKg8-EFnIcc',
     gallery: [
@@ -104,54 +197,107 @@ const contentSections = [
       'https://lh3.googleusercontent.com/d/1AYkofL2NoeyiVGUhr0P6poJZHuDTfJp7',
       'https://lh3.googleusercontent.com/d/11I19tS720A9R4RgOwuAThAHnSGMSWwHy'
     ],
+    text: [
+      `Le pavimentazioni interne delle unità immobiliari, relative alla zona giorno, alla zona notte e ai locali bagno, saranno previste secondo una tipologia standard di capitolato che consente all’acquirente di selezionare il materiale preferito tra le collezioni messe a disposizione presso i fornitori indicati dalla società venditrice.`,
+      `La fornitura standard comprenderà pavimenti in gres porcellanato di primaria qualità, disponibili in diversi effetti estetici e formati, scelti dal cliente tra le soluzioni comprese nel campionario base. A titolo indicativo, il campionario potrà comprendere prodotti di marchi quali **SAIME, Ragno, Piemme** e similari.`,
+      `Nei bagni e sulla parete della cucina saranno previsti rivestimenti coordinati coordinati con il livello qualitativo dell’intervento, selezionabili dal cliente. I rivestimenti saranno previsti fino a un’altezza massima indicativa di **2,30 m** da terra.`,
+      `L’acquirente potrà personalizzare l’aspetto estetico dell’immobile scegliendo i materiali compresi nella tipologia standard; eventuali richieste extra saranno soggette a relativo adeguamento economico.`
+    ]
+  },
+  {
+    id: 'sanitari',
+    num: '14',
+    title: 'Sanitari, rubinetterie e tinteggiature interne',
+    subtitle: 'Benessere Quotidiano',
+    image: 'https://images.unsplash.com/photo-1620626011761-9963d7b59a7a?auto=format&fit=crop&q=80&w=2000',
+    text: [
+      `I sanitari dei bagni saranno in porcellana di primaria qualità (es. **RAK Ceramics**) secondo la tipologia standard di capitolato. Le rubinetterie saranno selezionabili dal cliente tra le proposte disponibili presso i fornitori di riferimento.`,
+      `Nei bagni sarà previsto piatto doccia slim; il box doccia non è incluso nella fornitura standard. Nel bagno padronale potrà essere prevista la vasca o la doccia in funzione della tipologia dell’unità e delle scelte del cliente.`,
+      `Le superfici interne delle unità immobiliari saranno rifinite mediante pitturazione con prodotti **Caparol** o similari; nei bagni saranno utilizzati prodotti specifici antimuffa.`
+    ]
+  },
+  {
+    id: 'marmi-balconi',
+    num: '15',
+    title: 'Soglie, davanzali, balconi e terrazzi',
+    subtitle: 'Dettagli di Valore',
+    bgImage: 'https://lh3.googleusercontent.com/d/11kSOvJJYAma5Lb5K0ee3XlQ8CEE_uOtI',
+    text: [
+      `Le soglie e i davanzali saranno realizzati in **marmo Verde Marina**, materiale scelto per le sue caratteristiche estetiche, di resistenza e di durabilità.`,
+      `I balconi e i terrazzi saranno pavimentati con gres porcellanato per esterni **SAIME**, idoneo all’utilizzo esterno e scelto per garantire resistenza agli agenti atmosferici, praticità di manutenzione e continuità estetica.`
+    ]
+  },
+  {
+    id: 'gas-free',
+    num: '16',
+    title: 'Abitazioni gas free: impianto termico, climatizzazione e acqua calda sanitaria',
+    subtitle: 'Efficienza Sostenibile',
+    text: [
+      `Le unità immobiliari sono concepite secondo una logica impiantistica **totalmente elettrica**, risultando pertanto completamente svincolate dall’utilizzo del gas per una casa più moderna, più sicura e pienamente coerente con la sostenibilità.`,
+      `L’impianto termico è previsto con sistema alimentato da **pompa di calore** ad alta efficienza per gestire in modo integrato riscaldamento, raffrescamento e produzione di acqua calda sanitaria.`,
+      `L’emissione è affidata a **fan coil** installati negli ambienti principali e termoarredi nei bagni. Il sistema è collegato ad un serbatoio di accumulo da **280 litri** per l’acqua calda sanitaria.`
+    ]
+  },
+  {
+    id: 'domotica-solar',
+    num: '17',
+    title: 'Impianto elettrico, domotica, fotovoltaico con accumulo, videocitofono e antifurto',
+    subtitle: 'Tecnologia Evoluta',
+    text: [
+      `L’impianto elettrico è di **Livello 2** con componentistica **Bticino** e sistema di domotica **Living Now**, che consente il controllo di tapparelle, punti luce, consumi e condizionamento.`,
+      `Ogni unità è dotata di impianto **fotovoltaico di 4 kW** con sistema di **accumulo da 5 kWh**, riducendo il prelievo dalla rete e valorizzando il risparmio energetico.`,
+      `Il complesso è dotato di videocitofono **Comelit PoE VIP**. Ogni unità è predisposta o dotata di impianto antifurto filare Bticino, integrabile nel sistema domotico.`
+    ]
+  },
+  {
+    id: 'ascensore',
+    num: '18',
+    title: 'Ascensore',
+    subtitle: 'Accessibilità Schindler',
+    text: [
+      `Ciascun fabbricato sarà dotato di impianto ascensore a servizio di tutti i piani, compreso il piano interrato, con capienza di **6 persone** e portata pari a **480 kg**, di marca **Schindler**.`,
+      `L’impianto sarà realizzato in conformità alla normativa vigente per garantire comfort, funzionalità e continuità di servizio.`
+    ],
+    stats: [
+      { label: 'Capienza', value: '6 Persone' },
+      { label: 'Portata', value: '480 Kg' }
+    ]
+  },
+  {
+    id: 'box-auto-comuni',
+    num: '19',
+    title: 'Box auto, Aree esterne comuni e Impianti',
+    subtitle: 'Praticità & Servizi',
+    layout: 'split-text',
+    text: [
+      `### Box auto e piano interrato\n\nOgni appartamento sarà dotato di **box auto privato** con pavimentazione in cemento levigato e lisciato. Saranno inoltre presenti posti auto nelle aree esterne al parco. Il piano interrato sarà completato coerentemente con la funzione di autorimessa.`,
+      `### Aree esterne e impianti condominiali\n\nI fabbricati sono inseriti nel **Parco Degli Oleandri**. Ciascun fabbricato dispone di impianto di **autoclave**, **addolcimento delle acque** e serbatoio da **2.000 litri** per garantire continuità di servizio e qualità della risorsa idrica.`
+    ]
+  },
+  {
+    id: 'clausole',
+    num: '20',
+    title: 'Personalizzazioni, materiali equivalenti e clausole finali',
+    subtitle: 'Garanzie & Trasparenza',
+    text: [
+      `Il presente capitolato individua una tipologia standard di materiali e finiture. Le parti strutturali, l'involucro edilizio e tamponature risultano già definite; restano selezionabili finiture e componenti interni.`,
+      `Le immagini, i render e le planimetrie hanno valore esclusivamente descrittivo e commerciale. Ai fini della compravendita faranno fede esclusivamente il presente capitolato descrittivo di vendita e gli accordi sottoscritti tra le parti.`
+    ]
+  },
+  {
+    id: 'riepilogo-finale',
+    num: '21',
+    title: 'I nostri appartamenti in breve',
+    subtitle: 'Sintesi Tecnica',
+    bgImage: 'https://lh3.googleusercontent.com/d/1g5q2jyD_P3KykPulYJxVmDDUixscu0KR',
+    layout: 'standard',
     gridItems: [
-      { icon: Wind, title: 'Serramenti Nusco', desc: 'Infissi in PVC doppio vetro **Power 9000**.' },
-      { icon: DoorClosed, title: 'Portoncino & Porte', desc: 'Blindato **Classe 3** e porte interne laminate.' },
-      { icon: Palette, title: 'Pavimenti & Marmi', desc: 'Gres di prima scelta (**SAIME, Ragno, Piemme**).' },
-      { icon: Droplets, title: 'Sanitari RAK', desc: 'Qualità **RAK Ceramics** e rubinetterie di design.' }
-    ]
-  },
-  {
-    id: 'consulta-finiture',
-    num: '07b',
-    title: 'Dettagli di Capitolato',
-    subtitle: 'Consulta i Componenti',
-    layout: 'consultation',
-    items: [
-      { icon: Wind, title: 'Serramenti Nusco', desc: 'Infissi in PVC doppio vetro **Power 9000**.' },
-      { icon: DoorClosed, title: 'Portoncino & Porte', desc: 'Blindato **Classe 3** e porte interne laminate.' },
-      { icon: Palette, title: 'Pavimenti & Marmi', desc: 'Gres di prima scelta (**SAIME, Ragno, Piemme**).' },
-      { icon: Droplets, title: 'Sanitari RAK', desc: 'Qualità **RAK Ceramics** e rubinetterie di design.' }
-    ]
-  },
-  {
-    id: 'tecnologia',
-    num: '16-17',
-    title: 'Tecnologia & Energia',
-    subtitle: 'Abitazioni Gas Free',
-    text: [
-      `Le unità immobiliari sono concepite secondo una logica impiantistica **totalmente elettrica**. Pompa di calore per il riscaldamento, raffrescamento e acqua calda.`,
-      `Emissioni affidate a *fan coil* negli ambienti principali e termoarredi nei bagni. Impianto fotovoltaico da **4 kW** con accumulo da **5 kWh** per ogni unità.`
+      { icon: Thermometer, title: 'Climatizzazione', desc: 'Pompa di calore, fan coil e accumulo 280lt per ACS.' },
+      { icon: Cpu, title: 'Domotica', desc: 'Sistema Living Now Bticino per luci e tapparelle.' },
+      { icon: Zap, title: 'Fotovoltaico', desc: 'Impianto da 4 kW con accumulo da 5 kWh per unità.' },
+      { icon: Smartphone, title: 'Smart Access', desc: 'Videocitofono Comelit PoE VIP e antifurto Bticino.' }
     ],
-    items: [
-      { icon: Zap, title: 'Domotica Bticino', desc: 'Sistema **Living Now** per il controllo smart.' },
-      { icon: Wind, title: 'Climatizzazione', desc: 'Efficienza garantita dalla **pompa di calore**.' }
-    ]
-  },
-  {
-    id: 'servizi',
-    num: '18-21',
-    title: 'Dettagli Tecnici & Comuni',
-    subtitle: 'Funzionalità Superiore',
-    text: [
-      `Il fabbricato è dotato di ascensore **Schindler** (portata **480 kg**). Box auto privati nel piano interrato finito in cemento lisciato.`,
-      `Contesto urbanizzato con aree comuni verdi curate e impianti condominiali evoluti (*autoclave* e *addolcimento acque*).`
-    ],
-    items: [
-      { icon: ArrowUpCircle, title: 'Ascensore', desc: 'Modello **Schindler**, portata 6 persone.' },
-      { icon: Car, title: 'Box Auto', desc: 'Spazi privati e **sicuri** per ogni appartamento.' },
-      { icon: Trees, title: 'Area Verde', desc: 'Aree esterne pensate per la massima **vivibilità**.' }
-    ]
+    text: []
   }
 ];
 
@@ -175,13 +321,35 @@ export default function App() {
             <span className="text-sm uppercase tracking-[0.4em] text-brand-sage font-bold">Nola — Lotto 9 e 10</span>
             <span className="h-px w-12 bg-brand-sage opacity-40" />
           </div>
-          <p className="text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed italic mb-12">
-            Un'esperienza abitativa che fonde l'eleganza classica del design "Natural Tones" con le più avanzate tecnologie energetiche.
-          </p>
+          <div className="mt-16 max-w-4xl mx-auto bg-white/50 backdrop-blur-sm rounded-[40px] p-8 md:p-12 shadow-sm border border-white/20">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12 text-left">
+              {[
+                { icon: MapPin, label: 'UBICAZIONE', value: 'Via Circumvallazione, V° Traversa n. 9' },
+                { icon: Building2, label: 'COMPOSIZIONE', value: '2 Edifici, 3 Piani fuori terra' },
+                { icon: Layers, label: 'UNITÀ', value: '12 Appartamenti per edificio' },
+                { icon: Maximize, label: 'TIPOLOGIE', value: '3 e 4 Vani con Terrazzi/Giardini' }
+              ].map((item, idx) => (
+                <div key={idx} className="flex gap-6 items-start">
+                  <div className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white shadow-sm border border-brand-sage/5 shrink-0">
+                    <item.icon className="w-6 h-6 text-[#C2A878]" />
+                  </div>
+                  <div className="space-y-1">
+                    <div className="text-[10px] uppercase tracking-[0.3em] font-bold text-slate-400">
+                      {item.label}
+                    </div>
+                    <div className="text-xl lg:text-2xl font-serif italic text-slate-800 leading-tight">
+                      {item.value}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
           <motion.div 
             animate={{ y: [0, 10, 0] }} 
             transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-            className="flex justify-center"
+            className="flex justify-center mt-12"
           >
             <ChevronDown className="w-8 h-8 text-brand-sage opacity-40" />
           </motion.div>
@@ -235,10 +403,89 @@ export default function App() {
         return (
           <section 
             key={section.id} 
-            className={`py-24 lg:py-48 ${isOdd ? 'bg-brand-dark text-white/90' : 'bg-brand-cream'}`}
+            className={`py-24 lg:py-48 relative overflow-hidden ${isOdd ? 'bg-brand-dark text-white/90' : 'bg-brand-cream'}`}
           >
-            <div className="max-w-7xl mx-auto px-6">
-              {isGridImage ? (
+            {section.bgImage && (
+              <div className="absolute inset-0 z-0">
+                <img 
+                  src={section.bgImage} 
+                  alt="" 
+                  className={`w-full h-full object-cover ${section.id === 'riepilogo-finale' ? 'opacity-30 grayscale' : 'opacity-50 ' + (isOdd ? 'grayscale invert' : 'grayscale')}`}
+                  referrerPolicy="no-referrer"
+                />
+                <div className={`absolute inset-0 ${section.id === 'riepilogo-finale' ? 'bg-brand-sage/60' : (isOdd ? 'bg-brand-dark/40' : 'bg-brand-cream/40')}`} />
+              </div>
+            )}
+            <div className="max-w-7xl mx-auto px-6 relative z-10 text-center lg:text-left">
+              {section.id === 'riepilogo-finale' ? (
+                <div className="max-w-5xl mx-auto">
+                  <div className="text-center mb-16">
+                    <div className="accent-text text-[10px] uppercase tracking-[0.4em] font-bold mb-4 text-white/80">
+                      {section.num} — {section.subtitle}
+                    </div>
+                    <h2 className="text-4xl lg:text-5xl font-serif italic text-white">
+                      {section.title}
+                    </h2>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                    {section.gridItems?.map((item, i) => (
+                      <div key={i} className="bg-white/80 backdrop-blur-sm p-8 rounded-[32px] border border-white shadow-sm text-center">
+                        <div className="w-12 h-12 bg-brand-cream rounded-2xl flex items-center justify-center mx-auto mb-6">
+                          <item.icon className="w-6 h-6 text-[#C2A878]" />
+                        </div>
+                        <h3 className="text-lg font-serif italic mb-2 text-slate-800">{item.title}</h3>
+                        <p className="text-xs text-slate-500 leading-relaxed">{item.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="bg-white/80 backdrop-blur-sm p-10 rounded-[40px] border border-white shadow-sm flex flex-col md:flex-row items-center gap-10 text-left">
+                    <div className="w-20 h-20 bg-brand-cream rounded-[24px] flex items-center justify-center shrink-0">
+                      <Building2 className="w-10 h-10 text-[#C2A878]" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-serif italic mb-3 text-slate-800">Dotazioni Condominiali</h3>
+                      <p className="text-sm text-slate-500 leading-relaxed mb-6">
+                        Ascensore <strong>Schindler</strong> (6 persone), impianto autoclave, addolcitore acque e serbatoio da 2.000 litri. Box auto privati con pavimentazione in cemento levigato.
+                      </p>
+                      <div className="flex gap-4">
+                        <div className="flex items-center gap-3 px-4 py-2 bg-brand-cream/50 rounded-xl border border-brand-sage/10">
+                          <Users className="w-4 h-4 text-brand-sage" />
+                          <span className="text-xs font-bold text-slate-700">6 Persone</span>
+                        </div>
+                        <div className="flex items-center gap-3 px-4 py-2 bg-brand-cream/50 rounded-xl border border-brand-sage/10">
+                          <Weight className="w-4 h-4 text-brand-sage" />
+                          <span className="text-xs font-bold text-slate-700">630 Kg</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : section.layout === 'split-text' ? (
+                /* Split Text Layout (Two columns with line in the middle) */
+                <div className="max-w-5xl mx-auto">
+                  <div className="text-center mb-16">
+                    <div className={`accent-text text-[10px] uppercase tracking-[0.4em] font-bold mb-4 ${isOdd ? 'text-brand-sage' : 'text-brand-sage'}`}>
+                      {section.num} — {section.subtitle}
+                    </div>
+                    <h2 className={`text-5xl font-serif italic mb-8 leading-tight ${isOdd ? 'text-white' : 'text-slate-800'}`}>
+                      {section.title}
+                    </h2>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-16 relative">
+                    {/* Vertical Divider */}
+                    <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-slate-200" />
+                    
+                    <div className="space-y-6 markdown-body text-left">
+                      <ReactMarkdown>{section.text[0]}</ReactMarkdown>
+                    </div>
+                    <div className="space-y-6 markdown-body text-left">
+                      <ReactMarkdown>{section.text[1]}</ReactMarkdown>
+                    </div>
+                  </div>
+                </div>
+              ) : isGridImage ? (
                 /* Grid Image Layout (Inspiration from screenshot) */
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
                   <div>
@@ -296,51 +543,75 @@ export default function App() {
                 </div>
               ) : (
                 /* Standard Layout */
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-24">
-                  <div className={index % 4 === 0 ? 'order-1' : 'order-1 lg:order-2'}>
+                <div className={`grid grid-cols-1 ${(!section.items && !section.image && !section.gridItems) ? 'max-w-3xl mx-auto text-center' : 'lg:grid-cols-2 gap-24'}`}>
+                  <div className={(!section.items && !section.image && !section.gridItems) ? 'order-1' : (index % 4 === 0 ? 'order-1' : 'order-1 lg:order-2')}>
                     <div className={`accent-text text-[10px] uppercase tracking-[0.4em] font-bold mb-4 ${isOdd ? 'text-brand-sage' : 'text-brand-sage'}`}>
                       {section.num} — {section.subtitle}
                     </div>
                     <h2 className={`text-5xl font-serif italic mb-8 leading-tight ${isOdd ? 'text-white' : 'text-slate-800'}`}>
                       {section.title}
                     </h2>
-                    <div className={`space-y-6 markdown-body ${isOdd ? 'text-white/60' : 'text-slate-600'}`}>
+                    <div className={`space-y-6 markdown-body ${isOdd ? 'text-white/60' : 'text-slate-600'} ${(!section.items && !section.image && !section.gridItems) ? 'mx-auto' : ''}`}>
                       {section.text.map((p, i) => (
                         <div key={i} className="leading-relaxed">
                           <ReactMarkdown>{p}</ReactMarkdown>
                         </div>
                       ))}
                     </div>
-                  </div>
-                  <div className={index % 4 === 0 ? 'order-2' : 'order-2 lg:order-1'}>
-                    {section.items ? (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {section.items.map((item, i) => (
-                          <div key={i} className={`${isOdd ? 'dark-card' : 'natural-card'} p-10 flex flex-col h-full`}>
-                            <item.icon className="w-10 h-10 text-brand-sage mb-8" />
-                            <h3 className="text-2xl font-serif italic mb-4">{item.title}</h3>
-                            <div className={`text-sm leading-relaxed flex-grow markdown-body ${isOdd ? 'text-white/40' : 'text-slate-500'}`}>
-                              <ReactMarkdown>{item.desc}</ReactMarkdown>
+
+                    {section.stats && (
+                      <div className={`mt-16 pt-16 flex justify-center items-center gap-16 border-t ${isOdd ? 'border-white/10' : 'border-slate-200'} ${(!section.items && !section.image && !section.gridItems) ? 'mx-auto max-w-sm' : ''}`}>
+                        {section.stats.map((stat, idx) => (
+                          <React.Fragment key={idx}>
+                            <div className="text-center">
+                              <div className={`text-[10px] uppercase tracking-[0.3em] font-bold mb-3 ${isOdd ? 'text-brand-sage' : 'text-brand-sage'}`}>
+                                {stat.label}
+                              </div>
+                              <div className={`text-3xl font-serif italic ${isOdd ? 'text-white' : 'text-slate-800'}`}>
+                                {stat.value}
+                              </div>
                             </div>
-                          </div>
+                            {idx < section.stats.length - 1 && (
+                              <div className={`w-px h-12 ${isOdd ? 'bg-white/10' : 'bg-slate-200'}`} />
+                            )}
+                          </React.Fragment>
                         ))}
-                      </div>
-                    ) : (
-                      <div className="relative">
-                        <img 
-                          src={section.image || `https://picsum.photos/seed/${section.id}/800/1000`} 
-                          alt={section.title}
-                          className="w-full h-[600px] object-cover rounded-[56px] shadow-2xl"
-                          referrerPolicy="no-referrer"
-                        />
-                        <div className={`absolute -bottom-12 -left-12 p-8 max-w-xs ${isOdd ? 'bg-white/10 backdrop-blur-md rounded-[32px]' : 'natural-card'}`}>
-                          <p className={`text-sm italic ${isOdd ? 'text-white/80' : 'text-slate-500'}`}>
-                            "Un'architettura che dialoga con la natura circostante, garantendo privacy e comfort."
-                          </p>
-                        </div>
                       </div>
                     )}
                   </div>
+                  {(section.items || section.image || (!section.items && !section.image && !section.gridItems && false)) && (
+                    <div className={index % 4 === 0 ? 'order-2' : 'order-2 lg:order-1'}>
+                      {section.items ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                          {section.items.map((item, i) => (
+                            <div key={i} className={`${isOdd ? 'dark-card' : 'natural-card'} p-10 flex flex-col h-full`}>
+                              <item.icon className="w-10 h-10 text-brand-sage mb-8" />
+                              <h3 className="text-2xl font-serif italic mb-4">{item.title}</h3>
+                              <div className={`text-sm leading-relaxed flex-grow markdown-body ${isOdd ? 'text-white/40' : 'text-slate-500'}`}>
+                                <ReactMarkdown>{item.desc}</ReactMarkdown>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="relative">
+                          <img 
+                            src={section.image || `https://picsum.photos/seed/${section.id}/800/1000`} 
+                            alt={section.title}
+                            className="w-full h-[600px] object-cover rounded-[56px] shadow-2xl"
+                            referrerPolicy="no-referrer"
+                          />
+                          {section.quote && (
+                            <div className={`absolute -bottom-12 -left-12 p-8 max-w-xs ${isOdd ? 'bg-white/10 backdrop-blur-md rounded-[32px]' : 'natural-card'}`}>
+                              <p className={`text-sm italic ${isOdd ? 'text-white/80' : 'text-slate-500'}`}>
+                                "{section.quote}"
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -369,42 +640,7 @@ export default function App() {
         )
       })}
 
-      {/* Technical Summary - Final Table */}
-      <section className="bg-brand-cream py-32 lg:py-48">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="mb-24">
-            <h2 className="text-5xl font-serif italic mb-4">Specifiche Tecniche</h2>
-            <p className="text-slate-500 italic max-w-xl">Riepilogo delle caratteristiche principali del complesso residenziale.</p>
-          </div>
-          <div className="natural-card p-12 overflow-hidden border-brand-sage/20 bg-white shadow-2xl">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-slate-100">
-                    <th className="py-8 px-6 text-left font-serif italic text-2xl text-slate-800">Caratteristica</th>
-                    <th className="py-8 px-6 text-left font-serif italic text-2xl text-slate-800">Dettaglio</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-50">
-                  {[
-                    { field: 'Composizione', desc: 'Due edifici residenziali (3 piani + interrato)' },
-                    { field: 'Unità immobiliari', desc: '12 appartamenti per scala' },
-                    { field: 'Tipologie', desc: '3 e 4 vani con ampi terrazzi o giardini' },
-                    { field: 'Sicurezza', desc: 'Classe antisismica aggiornata, portoncini Classe 3' },
-                    { field: 'Efficientamento', desc: 'Gas Free, Fotovoltaico 4 kW, Accumulo 5 kWh' },
-                    { field: 'Domotica', desc: 'Bticino Living Now integrata' },
-                  ].map((row, idx) => (
-                    <tr key={idx} className="group hover:bg-slate-50 transition-colors">
-                      <td className="py-8 px-6 font-bold text-slate-800 text-base">{row.field}</td>
-                      <td className="py-8 px-6 text-slate-400 italic text-base group-hover:text-brand-sage transition-colors">{row.desc}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* Footer */}
       <footer className="bg-brand-dark py-24 text-center text-white/90">
