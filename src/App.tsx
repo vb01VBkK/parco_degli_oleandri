@@ -43,12 +43,14 @@ interface ContentSection {
   image?: string;
   bgImage?: string;
   text: string[];
-  layout?: 'grid-image' | 'consultation' | 'standard' | 'split-text';
+  layout?: 'grid-image' | 'consultation' | 'standard' | 'split-text' | 'stacked-grid';
   items?: { icon: any; title: string; desc: string }[];
   gridItems?: { icon: any; title: string; desc: string }[];
   gallery?: string[];
+  stackedGallery?: string[];
   quote?: string;
   stats?: { label: string; value: string }[];
+  partitionSchema?: { label: string; thickness: string; color: string }[];
 }
 
 const contentSections: ContentSection[] = [
@@ -132,6 +134,11 @@ const contentSections: ContentSection[] = [
     text: [
       `I divisori tra unità immobiliari contigue sono realizzati con sistema a **doppia fodera** in laterizio alveolato, costituito da due strati di muratura intervallati da isolante acustico dello spessore di **5 cm**, al fine di incrementare le prestazioni fonoisolanti tra appartamenti adiacenti.`,
       `Tale soluzione costruttiva contribuisce a garantire un miglior comfort abitativo e una più efficace separazione acustica tra le diverse unità, in linea con il livello qualitativo dell’intervento.`
+    ],
+    partitionSchema: [
+      { label: 'Laterizio Alveolato', thickness: '12 cm', color: 'bg-orange-200' },
+      { label: 'Isolante Acustico', thickness: '5 cm', color: 'bg-brand-sage/40' },
+      { label: 'Laterizio Alveolato', thickness: '12 cm', color: 'bg-orange-200' }
     ]
   },
   {
@@ -209,7 +216,12 @@ const contentSections: ContentSection[] = [
     num: '14',
     title: 'Sanitari, rubinetterie e tinteggiature interne',
     subtitle: 'Benessere Quotidiano',
-    image: 'https://images.unsplash.com/photo-1620626011761-9963d7b59a7a?auto=format&fit=crop&q=80&w=2000',
+    layout: 'stacked-grid',
+    stackedGallery: [
+      'https://lh3.googleusercontent.com/d/1IyAtLSCo_vTief1zcD9-PeenRhRGNdZO',
+      'https://lh3.googleusercontent.com/d/1PxbfnS8IDcw6PhDTc9OJuab5YNXopJs1',
+      'https://lh3.googleusercontent.com/d/1g1RkSdGc033STiakN5_UYnKF4IHeW1l-'
+    ],
     text: [
       `I sanitari dei bagni saranno in porcellana di primaria qualità (es. **RAK Ceramics**) secondo la tipologia standard di capitolato. Le rubinetterie saranno selezionabili dal cliente tra le proposte disponibili presso i fornitori di riferimento.`,
       `Nei bagni sarà previsto piatto doccia slim; il box doccia non è incluso nella fornitura standard. Nel bagno padronale potrà essere prevista la vasca o la doccia in funzione della tipologia dell’unità e delle scelte del cliente.`,
@@ -462,6 +474,69 @@ export default function App() {
                     </div>
                   </div>
                 </div>
+              ) : section.layout === 'stacked-grid' ? (
+                /* Stacked Grid Layout (One wide top image, two below) */
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+                  <div className={index % 4 === 0 ? 'order-1' : 'order-1 lg:order-2'}>
+                    <div className={`accent-text text-[10px] uppercase tracking-[0.4em] font-bold mb-4 ${isOdd ? 'text-brand-sage' : 'text-brand-sage'}`}>
+                      {section.num} — {section.subtitle}
+                    </div>
+                    <h2 className={`text-4xl lg:text-6xl font-serif italic mb-8 leading-tight ${isOdd ? 'text-white' : 'text-slate-800'}`}>
+                      {section.title}
+                    </h2>
+                    <div className={`space-y-6 mb-12 markdown-body text-justify ${isOdd ? 'text-white/60' : 'text-slate-600'}`}>
+                      {section.text.map((p, i) => (
+                        <div key={i} className="leading-relaxed">
+                          <ReactMarkdown>{p}</ReactMarkdown>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className={index % 4 === 0 ? 'order-2' : 'order-2 lg:order-1'}>
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Top Wide Image */}
+                      <div className="col-span-2">
+                        <motion.div
+                          whileInView={{ opacity: 1, y: 0 }}
+                          initial={{ opacity: 0, y: 20 }}
+                          transition={{ duration: 0.8 }}
+                        >
+                          <img 
+                            src={section.stackedGallery?.[0]} 
+                            alt="" 
+                            className="w-full h-48 object-cover rounded-[32px] shadow-lg"
+                            referrerPolicy="no-referrer"
+                          />
+                        </motion.div>
+                      </div>
+                      {/* Bottom Two Images */}
+                      <motion.div
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                      >
+                        <img 
+                          src={section.stackedGallery?.[1]} 
+                          alt="" 
+                          className="w-full h-64 object-cover rounded-[32px] shadow-lg"
+                          referrerPolicy="no-referrer"
+                        />
+                      </motion.div>
+                      <motion.div
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        transition={{ duration: 0.8, delay: 0.4 }}
+                      >
+                        <img 
+                          src={section.stackedGallery?.[2]} 
+                          alt="" 
+                          className="w-full h-64 object-cover rounded-[32px] shadow-lg"
+                          referrerPolicy="no-referrer"
+                        />
+                      </motion.div>
+                    </div>
+                  </div>
+                </div>
               ) : section.layout === 'split-text' ? (
                 /* Split Text Layout (Two columns with line in the middle) */
                 <div className="max-w-5xl mx-auto">
@@ -576,6 +651,46 @@ export default function App() {
                             )}
                           </React.Fragment>
                         ))}
+                      </div>
+                    )}
+
+                    {section.partitionSchema && (
+                      <div className="mt-16 pt-16 border-t border-slate-200">
+                        <div className="text-[10px] uppercase tracking-[0.3em] font-bold mb-8 text-brand-sage text-center">
+                          Schema Stratigrafico Divisorio
+                        </div>
+                        <div className="flex flex-col gap-1 max-w-md mx-auto relative group">
+                          {section.partitionSchema.map((layer, idx) => (
+                            <div key={idx} className="relative flex items-center justify-center">
+                              <div 
+                                className={`w-full h-16 ${layer.color} border border-black/5 rounded-sm flex items-center justify-center transition-all duration-500 group-hover:h-20`}
+                              >
+                                <div className="text-center px-4">
+                                  <div className="text-[10px] uppercase tracking-widest font-bold text-slate-800/60 leading-none mb-1">
+                                    {layer.label}
+                                  </div>
+                                  <div className="text-sm font-serif italic text-slate-800">
+                                    {layer.thickness}
+                                  </div>
+                                </div>
+                              </div>
+                              {/* Connector Lines */}
+                              {idx < section.partitionSchema!.length - 1 && (
+                                <div className="absolute -left-6 top-full h-1 w-px bg-slate-300" />
+                              )}
+                            </div>
+                          ))}
+                          {/* Total Indicator */}
+                          <div className="absolute -right-8 top-0 bottom-0 flex flex-col justify-center">
+                            <div className="h-full w-px bg-slate-300 relative">
+                              <div className="absolute top-0 left-1/2 -ml-1 w-2 h-px bg-slate-300" />
+                              <div className="absolute bottom-0 left-1/2 -ml-1 w-2 h-px bg-slate-300" />
+                              <div className="absolute left-4 top-1/2 -translate-y-1/2 rotate-90 text-[10px] font-bold tracking-widest text-slate-400 whitespace-nowrap">
+                                TOTALE ~ 29 CM
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     )}
                   </div>
